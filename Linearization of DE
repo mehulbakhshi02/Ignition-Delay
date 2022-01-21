@@ -1,0 +1,35 @@
+from sympy import *
+import matplotlib.pyplot as plt
+import numpy as np
+
+x0 = int(input("enter initial value of x "))
+y0 = int(input("enter initial value of y "))
+
+#df/dx@x0 df/dy@y0
+x,y = symbols('x y')
+f = x**3+y**2
+f_prime_x = f.diff(x)
+f_prime_y = f.diff(y)
+f_prime_x=lambdify([x,y], f_prime_x)
+f_prime_y=lambdify([x,y], f_prime_y)
+f=lambdify([x,y],f)
+
+#plotting
+z1=lambda x,y: f(x0,y0)+f_prime_x(x0,y0)*(x-x0)+f_prime_y(x0,y0)*(y-y0)
+x=np.linspace(-5,5,100)
+y=np.linspace(-5,5,100)
+X, Y = np.meshgrid(x,y)
+Z1=z1(X,Y)
+
+z2=lambda x,y: x**3+y**2
+x=np.linspace(-5,5,100)
+y=np.linspace(-5,5,100)
+X, Y = np.meshgrid(x,y)
+Z2=z2(X,Y)
+
+fig=plt.figure(figsize=[12,8])
+ax=fig.gca(projection='3d')
+ax.plot_surface(X,Y,Z1)
+ax.plot_surface(X,Y,Z2)
+
+plt.show()
